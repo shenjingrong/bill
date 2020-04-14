@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blackfinger.bill.dao.AccountInfoMapper">
+    <resultMap id="AccountInfoMapper" type="com.blackfinger.bill.model.AccountInfo">
+        <result column="account_id" property="accountId" jdbcType="INTEGER"/>
+        <result column="account_amount" property="accountAmount" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="clothes_stanadrd" property="clothesStandrad" jdbcType="DECIMAL"/>
+        <result column="eat_stanadrd" property="eatStandrad" jdbcType="DECIMAL"/>
+        <result column="live_stanadrd" property="liveStandrad" jdbcType="DECIMAL"/>
+        <result column="go_stanadrd" property="goStandrad" jdbcType="DECIMAL"/>
+        <result column="clothes_current" property="clothesCurrent" jdbcType="DECIMAL"/>
+        <result column="eat_current" property="eatCurrent" jdbcType="DECIMAL"/>
+        <result column="live_current" property="goCurrent" jdbcType="DECIMAL"/>
+        <result column="go_current" property="liveCurrent" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.blackfinger.bill.model.AccountInfo">
+        insert into account_info (account_amount, create_time, user_id, password, clothes_stanadrd, eat_stanadrd
+        , live_stanadrd, go_stanadrd, clothes_current, eat_current, live_current, go_current)
+        values (#{accountAmount}, #{createTime}, #{userId}, #{password}, #{clothesStandrad}
+        , #{eatStandrad}, #{liveStandrad}, #{goStandrad}, #{clothesCurrent}, #{eatCurrent},
+         #{goCurrent}, #{liveCurrent})
+    </insert>
+
+    <update id="addAmount" parameterType="com.blackfinger.bill.model.AccountInfo">
+        update account_info set
+        account_amount = account_amount + #{accountAmount},
+        clothes_current = clothes_current + #{clothesCurrent},
+        eat_current = eat_current + #{eatCurrent},
+        live_current = live_current + #{liveCurrent},
+        go_current = go_current + #{goCurrent}
+         where account_id = #{accountId}
+    </update>
+
+    <update id="deleteAmount" parameterType="com.blackfinger.bill.model.AccountInfo">
+        update account_info set
+        account_amount = account_amount - #{accountAmount},
+        clothes_current = clothes_current - #{clothesCurrent},
+        eat_current = eat_current - #{eatCurrent},
+        live_current = live_current - #{liveCurrent},
+        go_current = go_current - #{goCurrent} where account_id = #{accountId}
+    </update>
+
+    <select id="search" parameterType="com.blackfinger.bill.model.AccountInfo" resultMap="AccountInfoMapper">
+        select
+            account_id,
+            account_amount,
+            create_time,
+            user_id,
+            password,
+            clothes_stanadrd,
+            eat_stanadrd,
+            live_stanadrd,
+            go_stanadrd,
+            clothes_current,
+            eat_current,
+            live_current,
+            go_current
+        from
+            account_info
+        where 1=1
+        <if test="accountId != null and accountId != 0">
+            and account_id = #{accountId}
+        </if>
+        <if test="accountAmount != null and accountAmount != 0">
+            and account_amount = #{accountAmount}
+        </if>
+        <if test="createTime != null and createTime.trim() != ''">
+            and create_time = #{createTime}
+        </if>
+        <if test="userId != null and userId.trim() != ''">
+            and user_id = #{userId}
+        </if>
+        <if test="password != null and password.trim() != ''">
+            and password = #{password}
+        </if>
+    </select>
+</mapper>
