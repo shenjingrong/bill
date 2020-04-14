@@ -66,6 +66,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Override
     public void update(AccountInfo accountInfo) {
+        //主干分支
 //        accountInfoMapper.update(accountInfo);
     }
 
